@@ -1,0 +1,29 @@
+# Google Auth Wizard Configuration
+# This file contains the configuration settings for the Google Auth Wizard application
+
+server:
+  # Default port for the OAuth callback server
+  defaultPort: 8080
+  
+  # Maximum number of ports to try if the default port is busy
+  maxPortTries: 10
+  
+  # Timeout for the OAuth callback server (format: 5m, 300s, etc.)
+  serverTimeout: 5m0s
+
+oauth:
+  # OAuth callback path
+  callbackPath: /callback
+  
+  # Google OAuth playground URL for fetching scopes
+  oauthPlaygroundURL: https://developers.google.com/oauthplayground
+  
+  # Endpoint for fetching scopes
+  scopeEndpoint: getScopes
+  
+  # Timeout for scope fetching requests (format: 60s, 1m, etc.)
+  scopeTimeout: 1m0s
+
+terminal:
+  # Terminal interface height (number of items to display)
+  height: 20
