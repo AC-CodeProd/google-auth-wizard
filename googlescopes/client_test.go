@@ -71,7 +71,7 @@ func TestFetchScopes_Success(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(mockResponse)
+		_ = json.NewEncoder(w).Encode(mockResponse)
 	}))
 	defer server.Close()
 
@@ -110,7 +110,7 @@ func TestFetchScopes_Success(t *testing.T) {
 func TestFetchScopes_ServerError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Internal Server Error"))
+		_, _ = w.Write([]byte("Internal Server Error"))
 	}))
 	defer server.Close()
 
@@ -125,7 +125,7 @@ func TestFetchScopes_ServerError(t *testing.T) {
 func TestFetchScopes_InvalidJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte("invalid json"))
+		_, _ = w.Write([]byte("invalid json"))
 	}))
 	defer server.Close()
 
@@ -190,7 +190,7 @@ func TestGoogleServices_Methods(t *testing.T) {
 func TestFetchScopesWithContext_Timeout(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(100 * time.Millisecond)
-		w.Write([]byte(`{"success": true, "apis": {}}`))
+		_, _ = w.Write([]byte(`{"success": true, "apis": {}}`))
 	}))
 	defer server.Close()
 

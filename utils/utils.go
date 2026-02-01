@@ -43,7 +43,7 @@ func ParseFlags() string {
 	}
 
 	if forceNew {
-		os.Setenv("GOOGLE_AUTH_WIZARD_FORCE_NEW", "true")
+		_ = os.Setenv("GOOGLE_AUTH_WIZARD_FORCE_NEW", "true")
 	}
 
 	return filename
@@ -89,7 +89,9 @@ func isPortAvailable(port int) bool {
 	if err != nil {
 		return false
 	}
-	defer listener.Close()
+	defer func() {
+		_ = listener.Close()
+	}()
 	return true
 }
 

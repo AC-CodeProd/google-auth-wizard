@@ -116,9 +116,9 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 			str += fmt.Sprintf(" (%d scopes)", len(i.Children))
 		}
 		if selected {
-			fmt.Fprint(w, d.model.terminal.selectedItemStyle.Render("> "+str))
+			_, _ = fmt.Fprint(w, d.model.terminal.selectedItemStyle.Render("> "+str))
 		} else {
-			fmt.Fprint(w, d.model.terminal.titleStyle.Render(str))
+			_, _ = fmt.Fprint(w, d.model.terminal.titleStyle.Render(str))
 		}
 	} else {
 		var s strings.Builder
@@ -153,9 +153,9 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		}
 
 		if selected {
-			fmt.Fprint(w, d.model.terminal.selectedItemStyle.Render(s.String()))
+			_, _ = fmt.Fprint(w, d.model.terminal.selectedItemStyle.Render(s.String()))
 		} else {
-			fmt.Fprint(w, d.model.terminal.itemStyle.Render(s.String()))
+			_, _ = fmt.Fprint(w, d.model.terminal.itemStyle.Render(s.String()))
 		}
 	}
 }

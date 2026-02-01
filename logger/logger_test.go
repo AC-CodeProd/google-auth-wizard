@@ -76,9 +76,9 @@ func TestEnvironmentVariables(t *testing.T) {
 
 	defer func() {
 		if originalDebug == "" {
-			os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
+			_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
 		} else {
-			os.Setenv("GOOGLE_AUTH_WIZARD_DEBUG", originalDebug)
+			_ = os.Setenv("GOOGLE_AUTH_WIZARD_DEBUG", originalDebug)
 		}
 
 		if originalVerbose == "" {

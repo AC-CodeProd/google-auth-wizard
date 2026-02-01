@@ -21,7 +21,7 @@ func TestFindAvailablePort_Success(t *testing.T) {
 	if err != nil {
 		t.Errorf("Port %d should be available but got error: %v", port, err)
 	} else {
-		listener.Close()
+		_ = listener.Close()
 	}
 }
 
@@ -40,7 +40,7 @@ func TestFindAvailablePort_NoPortsAvailable(t *testing.T) {
 
 	defer func() {
 		for _, l := range listeners {
-			l.Close()
+			_ = l.Close()
 		}
 	}()
 

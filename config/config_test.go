@@ -160,19 +160,19 @@ func TestApplyEnvironmentOverrides(t *testing.T) {
 	defer func() {
 		for key, value := range originalEnvs {
 			if value == "" {
-				os.Unsetenv(key)
+				_ = os.Unsetenv(key)
 			} else {
-				os.Setenv(key, value)
+				_ = os.Setenv(key, value)
 			}
 		}
 	}()
 
-	os.Setenv("GOOGLE_AUTH_WIZARD_PORT", "9090")
-	os.Setenv("GOOGLE_AUTH_WIZARD_MAX_PORT_TRIES", "15")
-	os.Setenv("GOOGLE_AUTH_WIZARD_SERVER_TIMEOUT", "10m")
-	os.Setenv("GOOGLE_AUTH_WIZARD_CALLBACK_PATH", "/custom-callback")
-	os.Setenv("GOOGLE_AUTH_WIZARD_PLAYGROUND_URL", "https://custom.example.com")
-	os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_ENDPOINT", "customScopes")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_PORT", "9090")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_MAX_PORT_TRIES", "15")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_SERVER_TIMEOUT", "10m")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_CALLBACK_PATH", "/custom-callback")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_PLAYGROUND_URL", "https://custom.example.com")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_ENDPOINT", "customScopes")
 	os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_TIMEOUT", "2m")
 	os.Setenv("GOOGLE_AUTH_WIZARD_TERMINAL_HEIGHT", "25")
 
@@ -217,9 +217,9 @@ func TestApplyEnvironmentOverrides_InvalidValues(t *testing.T) {
 	originalPort := os.Getenv("GOOGLE_AUTH_WIZARD_PORT")
 	defer func() {
 		if originalPort == "" {
-			os.Unsetenv("GOOGLE_AUTH_WIZARD_PORT")
+			_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_PORT")
 		} else {
-			os.Setenv("GOOGLE_AUTH_WIZARD_PORT", originalPort)
+			_ = os.Setenv("GOOGLE_AUTH_WIZARD_PORT", originalPort)
 		}
 	}()
 
