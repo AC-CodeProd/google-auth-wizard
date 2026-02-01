@@ -38,7 +38,7 @@ func initializeLogger() {
 	}
 
 	if verbose := os.Getenv("GOOGLE_AUTH_WIZARD_VERBOSE"); verbose == "true" || verbose == "1" {
-		globalLogger.level = LEVEL_DEBUG
+		globalLogger.level = LEVEL_VERBOSE
 	}
 
 	if silent := os.Getenv("GOOGLE_AUTH_WIZARD_SILENT"); silent == "true" || silent == "1" {
@@ -93,5 +93,5 @@ func IsDebug() bool {
 }
 
 func IsVerbose() bool {
-	return IsDebug()
+	return globalLogger.level >= LEVEL_VERBOSE
 }

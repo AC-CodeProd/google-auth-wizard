@@ -53,14 +53,19 @@ func TestIsVerbose(t *testing.T) {
 	originalLevel := GetLevel()
 	defer SetLevel(originalLevel)
 
+	SetLevel(LEVEL_VERBOSE)
+	if !IsVerbose() {
+		t.Error("IsVerbose should return true when level is Verbose")
+	}
+
 	SetLevel(LEVEL_DEBUG)
-	if IsVerbose() != IsDebug() {
-		t.Error("IsVerbose should match IsDebug")
+	if IsVerbose() {
+		t.Error("IsVerbose should return false when level is Debug")
 	}
 
 	SetLevel(LEVEL_INFO)
-	if IsVerbose() != IsDebug() {
-		t.Error("IsVerbose should match IsDebug")
+	if IsVerbose() {
+		t.Error("IsVerbose should return false when level is Info")
 	}
 }
 
