@@ -173,8 +173,8 @@ func TestApplyEnvironmentOverrides(t *testing.T) {
 	_ = os.Setenv("GOOGLE_AUTH_WIZARD_CALLBACK_PATH", "/custom-callback")
 	_ = os.Setenv("GOOGLE_AUTH_WIZARD_PLAYGROUND_URL", "https://custom.example.com")
 	_ = os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_ENDPOINT", "customScopes")
-	os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_TIMEOUT", "2m")
-	os.Setenv("GOOGLE_AUTH_WIZARD_TERMINAL_HEIGHT", "25")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_SCOPE_TIMEOUT", "2m")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_TERMINAL_HEIGHT", "25")
 
 	config := GetDefaultConfig()
 
@@ -223,7 +223,7 @@ func TestApplyEnvironmentOverrides_InvalidValues(t *testing.T) {
 		}
 	}()
 
-	os.Setenv("GOOGLE_AUTH_WIZARD_PORT", "invalid")
+	_ = os.Setenv("GOOGLE_AUTH_WIZARD_PORT", "invalid")
 
 	config := GetDefaultConfig()
 	originalPortValue := config.Server.DefaultPort

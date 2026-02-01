@@ -114,7 +114,7 @@ func createCallbackHandler(config *oauth2.Config, tokenChan chan<- *oauth2.Token
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprint(w, SUCCESS_HTML_TEMPLATE)
+		_, _ = fmt.Fprint(w, SUCCESS_HTML_TEMPLATE)
 
 		tokenChan <- token
 	}

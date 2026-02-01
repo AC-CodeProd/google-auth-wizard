@@ -82,15 +82,15 @@ func TestEnvironmentVariables(t *testing.T) {
 		}
 
 		if originalVerbose == "" {
-			os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
+			_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
 		} else {
-			os.Setenv("GOOGLE_AUTH_WIZARD_VERBOSE", originalVerbose)
+			_ = os.Setenv("GOOGLE_AUTH_WIZARD_VERBOSE", originalVerbose)
 		}
 
 		if originalSilent == "" {
-			os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
+			_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
 		} else {
-			os.Setenv("GOOGLE_AUTH_WIZARD_SILENT", originalSilent)
+			_ = os.Setenv("GOOGLE_AUTH_WIZARD_SILENT", originalSilent)
 		}
 
 		globalLogger = &Logger{
@@ -100,9 +100,9 @@ func TestEnvironmentVariables(t *testing.T) {
 	}()
 
 	t.Run("Debug Environment", func(t *testing.T) {
-		os.Setenv("GOOGLE_AUTH_WIZARD_DEBUG", "true")
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
+		_ = os.Setenv("GOOGLE_AUTH_WIZARD_DEBUG", "true")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
 
 		initializeLogger()
 
@@ -112,9 +112,9 @@ func TestEnvironmentVariables(t *testing.T) {
 	})
 
 	t.Run("Verbose Environment", func(t *testing.T) {
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
-		os.Setenv("GOOGLE_AUTH_WIZARD_VERBOSE", "1")
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
+		_ = os.Setenv("GOOGLE_AUTH_WIZARD_VERBOSE", "1")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_SILENT")
 
 		initializeLogger()
 
@@ -124,9 +124,9 @@ func TestEnvironmentVariables(t *testing.T) {
 	})
 
 	t.Run("Silent Environment", func(t *testing.T) {
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
-		os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
-		os.Setenv("GOOGLE_AUTH_WIZARD_SILENT", "true")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_DEBUG")
+		_ = os.Unsetenv("GOOGLE_AUTH_WIZARD_VERBOSE")
+		_ = os.Setenv("GOOGLE_AUTH_WIZARD_SILENT", "true")
 
 		initializeLogger()
 
