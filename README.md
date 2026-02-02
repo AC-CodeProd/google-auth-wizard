@@ -15,8 +15,10 @@ Un outil en ligne de commande interactif pour simplifier l'authentification OAut
 
 ### Prérequis
 
-- Go 1.19+ 
+- Go 1.21+ 
 - Un projet Google Cloud avec OAuth2 configuré
+- Créer vos identifiants OAuth2 : https://console.cloud.google.com/apis/credentials?hl=fr&project={{votre nom de project}}
+- Activer les API et services nécessaires : https://console.cloud.google.com/apis/dashboard?hl=fr&project={{votre nom de project}}
 - Un fichier client secret JSON de Google Cloud
 
 ### Compilation
@@ -27,6 +29,63 @@ cd google-auth-wizard
 go mod download
 go build -o google-auth-wizard
 ```
+
+## 🔐 Configuration Google Cloud
+
+### 1. Créer un projet Google Cloud
+
+1. Accédez à [Google Cloud Console](https://console.cloud.google.com/)
+2. Cliquez sur le sélecteur de projet en haut de la page
+3. Cliquez sur "Nouveau projet"
+4. Donnez un nom à votre projet et cliquez sur "Créer"
+
+### 2. Configurer l'écran de consentement OAuth
+
+Avant de créer des identifiants, vous devez configurer l'écran de consentement :
+
+1. Allez sur [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
+2. Sélectionnez le type d'utilisateur :
+   - **Externe** : Pour tester avec n'importe quel compte Google (recommandé pour le développement)
+   - **Interne** : Uniquement si vous avez un compte Google Workspace
+3. Remplissez les informations requises :
+   - **Nom de l'application** : Le nom qui apparaîtra aux utilisateurs
+   - **E-mail de l'utilisateur assistance** : Votre adresse e-mail
+   - **Domaines autorisés** : Laissez vide pour les tests
+4. Cliquez sur "Enregistrer et continuer"
+5. **Scopes** : Ignorez cette section (les scopes seront demandés dynamiquement)
+6. **Utilisateurs test** : Ajoutez les adresses e-mail qui pourront tester votre application
+   - ⚠️ Important : Si votre app n'est pas publiée, seuls les utilisateurs test pourront se connecter
+7. Cliquez sur "Enregistrer et continuer"
+
+### 3. Activer les APIs nécessaires
+
+1. Accédez au [tableau de bord des APIs](https://console.cloud.google.com/apis/dashboard?hl=fr&project={{votre nom de project}})
+2. Cliquez sur "+ ACTIVER DES API ET DES SERVICES"
+3. Recherchez et activez les APIs dont vous avez besoin (exemple : Google Drive API, Gmail API, etc.)
+4. Répétez pour chaque API que vous souhaitez utiliser
+
+### 4. Créer les identifiants OAuth 2.0
+
+1. Allez sur [Identifiants](https://console.cloud.google.com/apis/credentials?hl=fr&project={{votre nom de project}})
+2. Cliquez sur "+ CRÉER DES IDENTIFIANTS" → "ID client OAuth"
+3. **Type d'application** : Sélectionnez **"Application de bureau"** (pas "Application Web")
+   - ⚠️ Important : Ne choisissez pas "Application Web", sinon l'authentification locale ne fonctionnera pas
+4. **Nom** : Donnez un nom descriptif (ex: "Google Auth Wizard Client")
+5. Cliquez sur "Créer"
+6. **Téléchargez le fichier JSON** :
+   - Cliquez sur l'icône de téléchargement à côté de votre client ID
+   - Sauvegardez le fichier dans votre répertoire de travail
+   - Le fichier sera nommé `client_secret_[ID].apps.googleusercontent.com.json`
+
+### 5. Configuration des URIs de redirection (automatique)
+
+Pour une application de bureau, les URIs de redirection sont gérés automatiquement par Google :
+- `http://localhost` (avec port dynamique)
+- L'outil utilisera `http://localhost:8080/callback` par défaut
+
+⚠️ **Note** : Si vous avez choisi "Application Web" par erreur, vous devrez :
+1. Supprimer l'identifiant créé
+2. Recréer un identifiant de type "Application de bureau"
 
 ## 🚀 Utilisation
 
@@ -49,6 +108,18 @@ go run main.go -file client_secret_[ID].apps.googleusercontent.com.json
 ```
 
 ### Workflow typique
+
+#### Configuration initiale (une seule fois)
+
+1. **Créer un projet Google Cloud** : Créez ou sélectionnez un projet sur [Google Cloud Console](https://console.cloud.google.com/)
+2. **Activer les APIs** : Activez les APIs nécessaires via https://console.cloud.google.com/apis/dashboard?hl=fr&project={{votre nom de project}}
+3. **Créer les identifiants OAuth2** : 
+   - Allez sur https://console.cloud.google.com/apis/credentials?hl=fr&project={{votre nom de project}}
+   - Créez un identifiant OAuth 2.0 Client ID
+   - Téléchargez le fichier JSON client secret
+   - Configurez l'URI de redirection : `http://localhost:8080/callback`
+
+#### Utilisation de l'outil
 
 1. **Lancement** : Exécutez la commande avec votre fichier client secret
 2. **Sélection des APIs** : Naviguez et sélectionnez les services Google APIs 
@@ -161,6 +232,51 @@ Les contributions sont les bienvenues ! Veuillez :
 ## 📝 Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## 🔧 Dépannage
+
+### Erreur: "redirect_uri_mismatch"
+
+**Cause** : Vous avez créé un client OAuth de type "Application Web" au lieu de "Application de bureau".
+
+**Solution** :
+1. Supprimez l'identifiant OAuth actuel
+2. Créez un nouveau client OAuth de type **"Application de bureau"**
+3. Téléchargez le nouveau fichier JSON
+
+### Le navigateur ne s'ouvre pas automatiquement
+
+**Solution** : Copiez l'URL affichée dans le terminal et collez-la manuellement dans votre navigateur.
+
+### Erreur: "Port already in use"
+
+**Cause** : Le port 8080 est déjà utilisé par une autre application.
+
+**Solution** : L'outil essaiera automatiquement jusqu'à 10 ports différents. Si le problème persiste, modifiez `defaultPort` dans `config.yaml`.
+
+### Erreur: "Access blocked: This app's request is invalid"
+
+**Cause** : L'écran de consentement OAuth n'est pas correctement configuré ou votre compte n'est pas ajouté comme utilisateur test.
+
+**Solution** :
+1. Vérifiez que l'écran de consentement OAuth est configuré
+2. Ajoutez votre adresse e-mail dans les "Utilisateurs test" si l'app n'est pas publiée
+3. Assurez-vous que les APIs sont activées dans votre projet
+
+### Erreur: "Token expired"
+
+**Cause** : Les tokens d'accès Google expirent généralement après 1 heure.
+
+**Solution** : Relancez l'outil pour obtenir un nouveau token.
+
+### Impossible de récupérer les scopes
+
+**Cause** : Problème de connexion à Google OAuth Playground ou timeout.
+
+**Solution** :
+1. Vérifiez votre connexion Internet
+2. Augmentez `scopeTimeout` dans `config.yaml`
+3. Réessayez plus tard
 
 ## 🆘 Support
 
